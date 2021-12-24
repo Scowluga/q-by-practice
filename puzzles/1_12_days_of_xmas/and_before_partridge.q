@@ -25,3 +25,7 @@ lyrics:raze {[day]
   "> ",/:reverse (day+1)#@[gifts; 0; {y,1_x}; $[day>0; "And a"; "A"]]} each til count days
 
 1 "\n"sv lyrics;
+
+/ Note: line ssr[intro; "%day"; days[day]] can be replaced by 
+/ `{(7#x),y,11_x}[intro;days[day]]` directly replacing the start of `intro`
+/ `raze ("On the ";;" day of ...")[days[day]]` using elision with enlist
