@@ -1,3 +1,6 @@
-# Q by Puzzles
+# Q by Problems
 
-A beginner's attempt at learning q by puzzles from https://code.kx.com/q/learn/pb/
+Resources:
+- [Q for Mortals](https://code.kx.com/q4m3/)
+- [Q by Puzzles](https://code.kx.com/q/learn/pb/)
+- [Q Reading Room](https://code.kx.com/q/learn/reading/)
