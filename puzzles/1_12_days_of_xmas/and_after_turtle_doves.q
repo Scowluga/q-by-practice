@@ -14,12 +14,14 @@ gifts:(
 
 days:" "vs"first second third forth fifth sixth seventh eighth ninth tenth eleventh twelfth"
 
+intro:"On the %day day of Christmas, my true love sent to me:"
+
 / We print the "and" after the second last line, except on the first day
 / e.x.
 / Two turtle doves and
 / A partridge in a pear tree.
 lyrics:raze {[day]
-  enlist["On the ", days[day], " day of Christmas, my true love sent to me:"],
+  enlist[ssr[intro; "%day"; days[day]]],
   "> ",/:reverse (day+1)#@[gifts; 1; ,; " and"]} each til count days
 
 1 "\n"sv lyrics;
