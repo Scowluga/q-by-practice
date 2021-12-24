@@ -1,5 +1,5 @@
 gifts:(
-  " partridge in a pear tree.";
+  "A partridge in a pear tree.";
   "Two turtle doves";
   "Three french hens";
   "Four calling birds";
@@ -20,6 +20,6 @@ days:" "vs"first second third forth fifth sixth seventh eighth ninth tenth eleve
 / And a partridge in a pear tree.
 lyrics:raze {[day]
   enlist["On the ", days[day], " day of Christmas, my true love sent to me:"],
-  "> ",/:reverse (day+1)#@[gifts; 0; $[day>0; "And a"; "A"],]} each til count days
+  "> ",/:reverse (day+1)#@[gifts; 0; {y,1_x}; $[day>0; "And a"; "A"]]} each til count days
 
 1 "\n"sv lyrics;
