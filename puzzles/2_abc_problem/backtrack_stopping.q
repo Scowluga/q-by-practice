@@ -11,7 +11,7 @@ backtrack:{[w; bs]                                       / w:word; bs:blocks
   {[w; bs]
     $[.done; 1b;                                         / solution reached - skip subproblem
       0=count w; .done::1b;                              / base case - mark problem as .done and return it
-      any .z.s[w _ 0;] each bs _/:where (upper first w) in/:bs]}[w; bs]} / any (w _ 0).z.s/:bs _/:where (upper first w) in/:bs]}[w; bs]}
+      any .z.s[w _ 0;] each bs _/:where (upper first w) in/:bs]}[w; bs]}
 
 \t sols:backtrack[;BLOCKS] each WORDS
 show sols

@@ -2,5 +2,5 @@
 Teaches recursion and backtracking.
 
 My solutions:
-- `exhaustive_search.q` a basic recursive solution.
-- `backtrack.q` proper backtracking including stopping after a successful solution is found (3x faster in stress test).
+- `backtrack_exhaustive.q` basic backtracking that exhaustively checks all valid solutions.
+- `backtrack_stopping.q` includes early stopping after a successful solution is found (3x faster in stress test).
