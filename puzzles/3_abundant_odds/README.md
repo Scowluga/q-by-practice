@@ -2,4 +2,7 @@
 Teachers iterators and accumulators.
 
 My solutions:
-- `initial.q` my initial attempt
+- `nxt.q` use a `nxt` function that returns the next abundant odd number. Combine `nxt` with accumulators to get output.
+- `nxt_pair.q` have `nxt` return not just the number, but also its sum of divisors to avoid recomputation for display.
+- `nxt_parallel.q` 
+- `filter.q` 
