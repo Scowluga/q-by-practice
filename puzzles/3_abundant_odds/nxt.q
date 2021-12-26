@@ -5,7 +5,7 @@ sd:{sum odds where 0=x mod odds:1+2*til ceiling x%6}
 aon:{(1=x mod 2)&x<sd x}
 
 / `nxt` obtains the next abundant odd number
-nxt:{{not aon x}{x+2}/x+$[0=x mod 2; 1; 2]} / Accumulator: while over
+nxt:{{not aon x}(2+)/x+$[0=x mod 2; 1; 2]}  / Accumulator: while over
 
 / First 25
 show 24 nxt\nxt 0                           / Accumulator: do scan
