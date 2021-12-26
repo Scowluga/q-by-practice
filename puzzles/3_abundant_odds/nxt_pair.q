@@ -20,3 +20,8 @@ nxt:{{not aon x}{pair 2+first x}/pair $[0=(first x) mod 2; 1; 2]+first x}
 
 / First greater than 1 billion
 \t show nxt pair 1000000000
+
+/ Note: we can support parallel processing using the peach operator
+/ In this solution, in `sd` we would change the `mod` operator to `(mod[x;])':`
+/ However, the performance of this even with multiple secondary tasks seems to be orders of magnitude worse
+/ Either I am doing something wrong, or perhaps multiple cores are not used and the context switching overhead dominates
