@@ -3,7 +3,7 @@ Teaches finite state machines and convergence.
 
 My solutions:
 - `magic.q` my initial attempt.
-- `magic_cache.q` with caching integer to string conversion results.
+- `magic_cached.q` with caching mechanism for converted strings.
 
 ## Integer to String Conversion
 A core part of this problem is integer to string conversion. As with any programming problem, we begin by thinking about

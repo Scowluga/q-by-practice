@@ -20,8 +20,12 @@ itos:{trim (x; `char$()){y . x}/(         / binary while accumulator
       x<count small; s,string small x;
       trim s,(string tens x div 10)," ",(string small x mod 10)] }) }
 
+/ Caching mechanism for `itos` results
+CACHE:0,itos each 1+til 100000;
+itos_c:{$[x<count CACHE; CACHE x; itos x]}
+
 / Four is magic
 magic:{
-  l:{count itos x}\[x];                   / convergence accumulator
-  out:{(itos y)," is ",itos x}':[l];      / each prior
+  l:(count itos_c@)\[x];                  / convergence accumulator
+  out:{(itos_c y)," is ",itos_c x}':[l];  / each prior
   1 _ out,enlist "four is magic" }
