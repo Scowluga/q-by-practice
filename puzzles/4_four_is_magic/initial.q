@@ -25,3 +25,8 @@ itos:{trim last (x; `char$()){y . x}/(
   denom[`thousand; 1000;;];
   denom[`hundred; 100;;];
   {[x; s]if[x>0; s,:itos_small x]; (0; s)})}
+
+magic:{
+  list:{count itos x}\[x];              / convergence accumulator
+  out:{(itos y)," is ",itos x}':[list]; / each prior
+  1 _ out,enlist "four is magic"}
