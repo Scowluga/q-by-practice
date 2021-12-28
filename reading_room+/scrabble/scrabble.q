@@ -22,7 +22,7 @@ DT:`score xdesc ([]
 
 / Display valid words given a rack
 by_score:{select word,score from DT where fc[upper x]fss/:freqs};
-bingo:{select word,score from DT where (length=7) and fc[upper x]fss/:freqs};
+bingo:{select word,score from DT where (length>=7|count x) and fc[upper x]fss/:freqs};
 
 / Utility display for two letter words
 twos:{[]                                              / nullary function, invoked via `twos[]`
