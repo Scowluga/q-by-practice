@@ -8,7 +8,10 @@ WL:system "curl http://wiki.puzzlers.org/pub/wordlists/unixdict.txt";
 fc:{count each group x}
 
 / Whether one frequency count is a superset of another (contains all chars)
-fss:{all(x-y)>=0}
+/ The first frequency count is allowed to contain wildcards "_" indicating blanks that match any tile
+fss:{
+  missing:neg sum diff where 0>diff:x-y;
+  missing<=$[x["_"]=0N; 0; x["_"]] }      / TODO: surely there must be a better way of doing this than a cond
 
 / Table of words sorted in descending order of word scores
 DT:`score xdesc ([]
