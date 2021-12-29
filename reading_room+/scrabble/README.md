@@ -9,5 +9,6 @@ Features:
 - Support for wildcard character `"_"` to imitate blanks. Note that the corresponding score does not account for blanks
   scoring 0.
 - `twos[]` function to display all two letter words grouped by first letter.
+- `valid` to check validity of a word.
 
 Good luck in your next game!

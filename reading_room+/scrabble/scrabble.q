@@ -2,7 +2,7 @@
 TV:(upper .Q.a)!1 3 3 2 1 4 2 4 1 8 5 1 3 1 1 3 10 1 1 1 1 4 4 8 4 10;
 
 / Word list
-WL:read0 `$"/path/to/word/list.txt";
+WL:read0 `$"/Users/davidlu/q/q-by-practice/reading_room+/scrabble/CSW.txt";
 
 / Frequency count of a word
 fc:{count each group x}
@@ -30,3 +30,6 @@ twos:{[]                                              / nullary function, invoke
   changes: where ({not (first x)=(first y)}':)words;  / use each prior ': to find indices where the first letter changes
   cl:cut[changes; words];                             / use `cut` to partition words by first letter
   show each " "sv/:cl;}                               / join each list by spaces using `sv` applied each right /:
+
+/ Check valid word
+valid:{(upper x) in WL}
