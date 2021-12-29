@@ -1,6 +1,6 @@
 / How many times does character y occur in string x?
-f:{count where y=x}
+m:{count where y=x}
 
-f:{sum y=x}
+m:{sum y=x}
 
-f:{count group[x][y]}
+m:{count group[x][y]}
