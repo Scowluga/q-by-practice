@@ -27,7 +27,7 @@ bingo:{select word,score from DT where (length>=7|count x) and fc[upper x]fss/:f
 / Utility display for two letter words
 twos:{[]                                              / nullary function, invoked via `twos[]`
   words:WL where 2=count each WL;                     / filter WL to get two letter words
-  changes: where ({not (first x)=(first y)}':)words;  / use each prior ': to find indices where the first letter changes
+  changes: where ({first[x]<>first y}':)words;        / use each prior ': to find indices where the first letter changes
   cl:cut[changes; words];                             / use `cut` to partition words by first letter
   show each " "sv/:cl;}                               / join each list by spaces using `sv` applied each right /:
 
