@@ -1,3 +1,4 @@
+/ ----- My attempt -----
 / Whether dictionaries are equal
 deq:{(asc asc each x)~(asc asc each y)}
 
@@ -10,4 +11,4 @@ eqr:{
   eqs:deq[group[x];] each rotations;
   any eqs }
 
-/ Unfinished. This solution is extremely verbose. 
+/ ----- Provided solution -----
