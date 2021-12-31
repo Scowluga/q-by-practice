@@ -1,14 +1,10 @@
 / ----- My attempt -----
-/ Whether dictionaries are equal
-deq:{(asc asc each x)~(asc asc each y)}
-
-/ Indicies of x rotated by y
-r:{mod[y+group[x]; count x]}
-
-/ EQual Rotated - is y a rotated version of x?
 eqr:{
-  rotations:r[y;] each til count y; 
-  eqs:deq[group[x];] each rotations;
-  any eqs }
+  rotations:{mod[y+group[x]; count x]}[x;] each til count x;          / use mod to get rotated index
+  any {(asc asc each x)~(asc asc each y)}[;group[y]] each rotations } / sort dictionaries to check identity ~
 
 / ----- Provided solution -----
+/ We use scan convergence accumulator to generate all rotations (since convergence means looping back to original)
+f1:{x in (1 rotate)scan y}
+
+f2:{x in {raze reverse 0 1 _ x}scan y}
