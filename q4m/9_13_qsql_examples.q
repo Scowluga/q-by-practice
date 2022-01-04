@@ -61,4 +61,40 @@ favg:{(sum x*1+til ctx)%ctx*ctx:count x}
 select favgpx:favg px by sym from trades;
 
 / ----- Meaty Queries -----
+/ Volume-weighted average price by day for symbol
+select vwap:qty wavg px by dt from trades where sym=`aapl;
 
+/ Volume-weighted average price for 100-ms buckets for symbol
+/ Grouping by dt and 100 ms time buckets, aggregation using wavg
+select vwap:qty wavg px by dt, 100 xbar tm from trades where sym=`aapl;
+
+/ Trades attaining maximum price each day
+select from trades where px=(max; px) fby sym;                    / fby grouping
+
+/ User-defined aggregate usage
+select from trades where px<2*(favg; px) fby sym;                 / fby with custom aggregate function
+
+/ Average daily volume and price for all 
+atrades:select avgqty:avg qty, avgpx:avg px by sym, dt from trades;
+
+/ Find days when average price went up
+/ Use grouping without aggregation - the result is nested columns of dates and prices
+deltas0:{0,1 _ deltas x}                                          / custom deltas function where initial result is 0
+select dt, avgpx by sym from atrades where 0<deltas0 avgpx;       / deltas0 to compare adj. averages from inner query
+
+/ Profit of ideal transaction over the month for each symbol
+/ Note that our trades table only contains transactions over a month, so we don't group by month here
+/ This is basically "Best time to buy and sell stocks"
+select max px-mins px by sym from trades;                         / custom aggregate function to find optimal profit
+
+/ Denormalize trades data 
+dntrades:select dt, tm, qty, px by sym from trades;               / grouping without aggregation (compound columns)
+
+/ Num days trading, average price
+select sym, days:count each dt, avgpx:avg each px from dntrades;  / unary each iterators for compound columns
+
+/ Custom function 
+select sym, favgpx:favg px from dntrades;
+
+/ Volume-weighted average
+select sym, vwap:qty wavg' px from dntrades;                      / binary each iterator (zip) for wavg
