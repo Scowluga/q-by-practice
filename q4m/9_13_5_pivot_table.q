@@ -1,4 +1,5 @@
-show t:([]k:1 2 3 2 3; p:`a1`a2`a1`a3`a2; v:100 200 300 400 500);
+t:([]k:1 2 3 2 3; p:`a1`a2`a1`a3`a2; v:100 200 300 400 500);
+tn:([] k:1 2 3 2 3; p:(`a1;2;`a1;3;2); v:100 200 300 400 500);
 
 / 1. Collect unique values of the pivot column `p` into list `P`
 P:distinct t[`p]
@@ -34,4 +35,4 @@ dopivot:{[t; kn; pn; vn]
   P:?[t; (); (); (distinct; pn)];
   ?[t; (); (enlist kn)!enlist kn; (#; `P; (!; pn; vn))] }
 
-
+/ ...
