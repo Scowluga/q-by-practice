@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+<script src="c.js"></script> 
+<script>
+var serverurl = "//localhost:4242/",    // URL of our q service
+  c = connect(),                        // connection object
+  ws;                                   // web socket
+
+function connect() {
+    if ("WebSocket" in window) {
+        ws = new WebSocket("ws:" + serverurl);
+        ws.binaryType="arraybuffer";
+        ws.onopen=function(e){
+        };
+        ws.onclose=function(e){
+        };
+        ws.onmessage=function(e){
+            sayN(deserialize(e.data));
+        };
+        ws.onerror=function(e) {window.alert("WS Error") };
+    } else alert("WebSockets not supported on your browser.");
+}
+function sayN(n) {
+    document.getElementById('answer').textContent = n;
+}
+</script>
+</head>
+<body>
+    <h1 style='font-size:200px' id='answer'></h1>
+</body>
+</html>
