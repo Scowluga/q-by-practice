@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="http://code.highcharts.com/stock/highstock.js"></script>
+  <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+</head>
+<body>
+  <div id="container" style="height: 500px; min-width: 500px"></div>
+</body>
+<script src="c.js"></script>
+<script>
+  var serverurl = "//localhost:5042/",
+    ws,
+    c = connect(),
+    ticker = "NVDA",
+    startdt = "2008-01-01";
+
+  function connect() {
+    if ("WebSocket" in window) {
+      ws=new WebSocket("ws:" + serverurl);
+      ws.binaryType="arraybuffer";
+      ws.onopen=function(e){
+        toQ([ticker, startdt]);
+      };
+      ws.onclose=function(e){
+      };
+      ws.onmessage=function(e){
+        return fromQ(e.data);
+      };
+      ws.onerror=function(e) {window.alert("WS Error") };
+    } else alert("WebSockets not supported on your browser.");
+  }
+
+  function toQ(pl) {
+    ws.send(serialize({ payload: pl }));
+  }
+
+  function fromQ(raw) {
+    var data = deserialize(raw);
+    return createChart(data);
+  }
+
+  function toUTC(x) {
+    var y = new Date(x);
+    y.setMinutes(y.getMinutes() + y.getTimezoneOffset());
+    return y.getTime();
+  }
+
+  function createChart(data) {
+    $('#container').highcharts('StockChart', {
+      rangeSelector : {
+        selected : 1
+      },
+      title : {
+        text : ticker + ' Stock Price'
+      },
+      series : [{
+        name : ticker,
+        data : data.hist.map(function(x){return [toUTC(x.Date), x.Close]}),
+        tooltip: {
+          valueDecimals: 2
+        }
+      }]
+    });
+  }
+</script>
+</html>
