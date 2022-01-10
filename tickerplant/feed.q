@@ -1,4 +1,6 @@
-/ generate data for rdb demo
+/
+Generate random data for rdb demo
+\
 
 sn:2 cut (
  `AMD;"ADVANCED MICRO DEVICES";

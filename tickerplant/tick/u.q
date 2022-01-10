@@ -1,5 +1,5 @@
 /
-
+Globals
  .u.w - dictionary of tables->(handle;syms)
  .u.i - msg count in log file
  .u.j - total msg count (log file plus those held in buffer)
