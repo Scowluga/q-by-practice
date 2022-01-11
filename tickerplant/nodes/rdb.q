@@ -1,6 +1,5 @@
-/
-Usage: q nodes/r.q [host]:port[:usr:pwd] [host]:port[:usr:pwd]
-\
+/ A real-time database
+/ Usage: q nodes/rdb.q [host]:port[:usr:pwd] [host]:port[:usr:pwd]
 
 if[not "w"=first string .z.o;system "sleep 1"];
 

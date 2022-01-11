@@ -1,5 +1,4 @@
-/ cx.q
-/ example clients
+/ Example clients
 
 x:.z.x 0                  / client type
 s:`;                   	  / default all symbols

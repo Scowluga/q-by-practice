@@ -1,4 +1,3 @@
-/ feed.q
 / Generates random data to feed into the tickerplant
 
 sn:2 cut (                                      / symbol and name
