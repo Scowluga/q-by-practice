@@ -61,19 +61,17 @@ end wait4ticker
 tell application "Terminal"
 	activate
 	if (true = my hasticker()) then return
-	do script "cd " & T & "; " & Q & " " & T & "/tick.q -p 5010"
+	do script "cd " & T & "; " & Q & " " & T & "tick.q -p 5010"
 	delay (0.5)
 	if (false = my wait4ticker()) then return
 	set number of rows of front window to 30
 	set number of columns of front window to 100
-	my newtab("rdb", "cd " & T & "; " & Q & " " & T & "/tick/r.q -p 5011")
+	my newtab("rdb", "cd " & T & "; " & Q & " " & T & "tick/r.q -p 5011")
 	my newdb("hlcv", 5014)
 	my newdb("last", 5015)
 	my newdb("tq", 5016)
 	my newdb("vwap", 5017)
 	my newdb("show", 0)
-	my newtab("feed", Q & " " & T & "feed.q localhost:5010 -t 507")
-	set selected of tab 1 of front window to true
+	my newtab("feed", Q & " " & T & "feed.q localhost:5010")
 	my setname("ticker")
-	set selected of tab 2 of front window to true
 end tell
