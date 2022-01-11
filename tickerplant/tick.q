@@ -1,16 +1,44 @@
-/
-Usage: q tick.q sym . -p 5001 </dev/null >foo 2>&1 &
-\
+/ tick.q
+/ A simple tickerplant
+/ Usage: q tick.q [DST] [-p 5010] [-o h]
 
-"kdb+tick 2.8 2014.03.12"
+\l schema.q                            / load table schemas
 
-/q tick.q SRC [DST] [-p 5010] [-o h]
-system"l tick/",(src:first .z.x,enlist"sym"),".q"
+/ =====================================================================================================================
+/ u.q
 
-if[not system"p";system"p 5010"]
-
-\l tick/u.q
 \d .u
+init:{
+  w::t!(count t::tables`.)#() }
+
+del:{[x; y]
+  w[x]_:w[x;;0]?y }
+
+.z.pc:{                             / override port close handler
+  del[; x]each t }
+
+sel:{[x; y]
+  $[`~y; x;select from x where sym in y] }
+
+pub:{[t; x]
+  {[t; x; w]
+    if[count x:sel[x]w 1; (neg first w)(`upd; t; x)] }[t; x]each w t }
+
+add:{
+  $[(count w x)>i:w[x;;0]?.z.w; .[`.u.w;(x;i;1);union;y];
+    w[x],:enlist(.z.w; y)]; (x; $[99=type v:value x; sel[v]y; @[0#v; `sym; `g#]]) }
+
+sub:{
+  if[x~`; :sub[;y]each t];
+  if[not x in t; 'x];
+  del[x].z.w;
+  add[x; y] }
+
+end:{
+  (neg union/[w[;;0]]) @\: (`.u.end; x) }
+/ =====================================================================================================================
+/ tick.q
+
 ld:{
   if[not type key L::`$(-10_string L),string x;
     .[L;();:;()]];
@@ -20,14 +48,14 @@ ld:{
     exit 1];
   hopen L }
 
-tick:{
+tick:{[dst]
   init[];
   if[not min(`time`sym~2#key flip value@)each t;
     '`timesym];
   @[; `sym; `g#]each t;
   d::.z.D;
-  if[l::count y;
-    L::`$":",y,"/",x,10#".";
+  if[l::count dst;
+    L::`$":",dst,"/",string .z.D;
     l::ld d] }
 
 endofday:{
@@ -70,15 +98,14 @@ if[not system"t";
     if[l; l enlist (`upd; t; x); i+:1]; }];
 
 \d .
-.u.tick[src;.z.x 1];
+.u.tick[.z.x 0];
 
-\
-
-/test
->q tick.q
->q tick/ssl.q
-/run
->q tick.q sym  .  -p 5010	/tick
->q tick/r.q :5010 -p 5011	/rdb
->q sym            -p 5012	/hdb
->q tick/ssl.q sym :5010		/feed
+/
+Globals
+ .u.w - dictionary of tables->(handle;syms)
+ .u.i - msg count in log file
+ .u.j - total msg count (log file plus those held in buffer)
+ .u.t - table names
+ .u.L - tp log filename, e.g. `:./2008.09.11
+ .u.l - handle to tp log file
+ .u.d - date

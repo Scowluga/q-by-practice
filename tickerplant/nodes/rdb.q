@@ -1,5 +1,5 @@
 /
-Usage: q tick/r.q [host]:port[:usr:pwd] [host]:port[:usr:pwd]
+Usage: q nodes/r.q [host]:port[:usr:pwd] [host]:port[:usr:pwd]
 \
 
 if[not "w"=first string .z.o;system "sleep 1"];

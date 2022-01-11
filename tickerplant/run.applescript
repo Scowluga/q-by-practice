@@ -10,7 +10,7 @@ set Q to R & "~/q/m64/q"
 set T to "~/q/q-by-practice/tickerplant/"
 
 on newdb(name, port)
-	newtab(name, Q & " " & T & "cx.q " & name & " -p " & (port as text))
+	newtab(name, Q & " " & T & "nodes/cx.q " & name & " -p " & (port as text))
 end newdb
 
 on newtab(name, cmd)
@@ -66,12 +66,13 @@ tell application "Terminal"
 	if (false = my wait4ticker()) then return
 	set number of rows of front window to 30
 	set number of columns of front window to 100
-	my newtab("rdb", "cd " & T & "; " & Q & " " & T & "tick/r.q -p 5011")
+	my newtab("rdb", "cd " & T & "; " & Q & " " & T & "nodes/rdb.q -p 5011")
 	my newdb("hlcv", 5014)
 	my newdb("last", 5015)
 	my newdb("tq", 5016)
 	my newdb("vwap", 5017)
 	my newdb("show", 0)
 	my newtab("feed", Q & " " & T & "feed.q localhost:5010")
+	set selected of tab 1 of front window to true
 	my setname("ticker")
 end tell
