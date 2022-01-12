@@ -2,7 +2,7 @@
 
 .z.ps:{                           / async handler
   if[-11h<>type first x; :];      / only allow remote procedure calls
-  .[value first x; 1 _ x; ::];}   / trap evaluation
+  .[value first x; 1 _ x; ::]; }  / trap evaluation
 
 .z.pg:{`unsupported}              / sync handler - no sync communication is allowed
 
@@ -12,25 +12,25 @@
 
 .ps.pub:{[topic; data]            / publish data to a topic
   {[h; t; d]                      / send async message
-    neg[h](`.ps.push; t; d);}[; topic; data] each .ps.w[topic];}
+    neg[h](`.ps.push; t; d);}[; topic; data] each .ps.w[topic]; }
 
 .z.pc:{[h]                        / connection close handler
-  .ps.w:except[;h] each .ps.w;}   / remove active subscriptions of closing handle
+  .ps.w:except[;h] each .ps.w; }  / remove active subscriptions of closing handle
 
 .ps.add:{[topic]                  / subscribe caller to topic
-  .ps.w[topic],:.z.w;}
+  .ps.w[topic],:.z.w; }
 
 / Subscribing ==========================================================================================================
 
 .ps.rec:(`symbol$())!()           / subscription receiver functions; each will be 
 
 .ps.push:{[topic; data]           / used by a publisher to push data
-  .ps.rec[topic][data];}          / apply
+  .ps.rec[topic][data]; }         / apply
 
 .ps.sub:{[topic; port; rec]       / subscribe to a single topic with a receiver function
   h:hopen `$"::",string port;     / connect to publisher
   neg[h](`.ps.add; topic);        / add self as subscriber
-  .ps.rec[topic]:rec;}            / store receiver function
+  .ps.rec[topic]:rec; }           / store receiver function
 
 .ps.bufs:enlist[::]                                / contains internal buffers for zipping published messages
 / ts is a size n>=2 list of topic symbols
@@ -48,7 +48,7 @@
     .ps.bufs[zid; t]:.ps.bufs[zid; t],enlist data; / add data to the dict - NOTE: we have to use this terrible syntax to maintain general list? why...
     if[all 1<count each .ps.bufs[zid];    / all topics have at least 1 real data field
       rec . value .ps.bufs[zid;; 1];                / apply zipped inputs to receiver
-      .ps.bufs[zid]:_[; 1] each .ps.bufs[zid];];}[;; zid; rec];    / delete 
+      .ps.bufs[zid]:_[; 1] each .ps.bufs[zid];]; }[;; zid; rec];    / delete 
   zsub:{[t; p; zrec]
     .ps.sub[t; p; zrec[t;]];}[;;zrec];
-  ts zsub' ps;}   / we subscribe with each topic individually; we consider zip as a layer on top of 
+  ts zsub' ps; }   / we subscribe with each topic individually; we consider zip as a layer on top of 
