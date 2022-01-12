@@ -66,7 +66,7 @@ tell application "Terminal"
 	if (false = my wait4ticker()) then return
 	set number of rows of front window to 30
 	set number of columns of front window to 100
-	my newtab("rdb", "cd " & T & "; " & Q & " " & T & "nodes/rdb.q -p 5011")
+	my newtab("rdb", Q & " " & T & "nodes/rdb.q -p 5011")
 	my newdb("hlcv", 5014)
 	my newdb("last", 5015)
 	my newdb("tq", 5016)
