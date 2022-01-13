@@ -37,7 +37,7 @@
 / When 2 or more topics are zipped, data sent is buffered until each topic has at least one record
 / One record per topic is then applied at once in FIFO order to the receiver function
 
-.ps.bufs:enlist[::]                   / .ps.bufs contains buffers for zipped topics (:: for generality)
+.ps.bufs:enlist[::]                               / .ps.bufs contains buffers for zipped topics (:: for generality)
 
 .ps.zip:{[ts; ps; rec]                            / zips topics to be applied together to rec
   if[count[ts]<>count[ps]; `length];              / ts (topic symbols) and ps (topic ports) must have equal size
