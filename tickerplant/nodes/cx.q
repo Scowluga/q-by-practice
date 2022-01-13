@@ -1,10 +1,11 @@
 / Example clients
 
+\l internal/ps.q
+
 x:.z.x 0                  / client type
 s:`;                   	  / default all symbols
 d:`GOOG`IBM`MSFT          / symbol selection
 t:`trade`quote            / default tables
-h:hopen `::5010           / connect to tickerplant
 
 / rdb
 if[x~"rdb";
@@ -40,7 +41,6 @@ if[x~"tq";
   q,:select by sym from x]}]
 
 if[x~"vwap";t:`trade;
- upd:{[t;x]vwap+:select size wsum price,sum size by sym from x};
- upds:{[t;x]vwap+:select size wsum price,sum size by sym from x;show x}]
+ upd:{[t;x]vwap+:select size wsum price,sum size by sym from x}]
 
-{h(".u.sub";x;s)} each t;
+.ps.sub[`tick; 5010; upd];

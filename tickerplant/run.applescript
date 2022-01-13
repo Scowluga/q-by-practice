@@ -15,7 +15,7 @@ end newdb
 
 on newtab(name, cmd)
 	tell application "System Events" to tell process "Terminal.app" to keystroke "t" using command down
-	tell application "Terminal" to do script cmd in front window
+	tell application "Terminal" to do script "cd " & T & "; " & cmd in front window
 	setname(name)
 	delay (0.5)
 end newtab

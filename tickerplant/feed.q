@@ -1,5 +1,7 @@
 / Generates random data to feed into the tickerplant
 
+\l internal/ps.q
+
 sn:2 cut (                                      / symbol and name
  `AMD;"ADVANCED MICRO DEVICES";
  `AIG;"AMERICAN INTL GROUP INC";
@@ -63,12 +65,12 @@ q:{                                             / generates one tick with `x` qu
  (s i; p-qb n; p+qa n; vol x; vol x; x?m; e i) }
 
 feed:{h$[rand 2;                                / update tickerplant with either a group of trades or quotes
- (".u.upd"; `trade; t 1+rand maxn);
- (".u.upd"; `quote; q 1+rand qpt*maxn)];}
+ ("upd"; `trade; t 1+rand maxn);
+ ("upd"; `quote; q 1+rand qpt*maxn)];}
 
 feedm:{h$[rand 2;
- (".u.upd"; `trade; (enlist a#x),t a:1+rand maxn);
- (".u.upd"; `quote; (enlist a#x),q a:1+rand qpt*maxn)];}
+ ("upd"; `trade; (enlist a#x),t a:1+rand maxn);
+ ("upd"; `quote; (enlist a#x),q a:1+rand qpt*maxn)];}
 
 init:{
  o:"t"$9e5*floor (.z.T-3600000)%9e5;

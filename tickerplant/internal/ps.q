@@ -10,7 +10,7 @@
 
 .ps.w:(`symbol$())!()                 / topic symbol -> list of subscriber handlers
 
-.ps.pub:{[t; d]                       / publish data to topic
+.ps.pub:{[t; d]                       / publish data to topic; data is applied, so must be enlisted
   {[h; t; d]                          / send async message to each subscriber
     neg[h](`.ps.push; t; d);}[; t; d] each .ps.w[t]; }
 
@@ -23,14 +23,20 @@
 / Subscribing ==========================================================================================================
 
 .ps.rec:(`symbol$())!()               / subscription receiver functions (can only subscribe once to each topic)
+.ps.opt:(`symbol$())!()               / the operator used to call the receiver function (apply at or apply)
 
 .ps.push:{[t; d]                      / push data to subscriber
-  .ps.rec[t][d]; }
+  .ps.opt[t][.ps.rec[t]; d]; }
 
-.ps.sub:{[topic; port; rec]           / subscribe to a single topic with a receiver function
-  h:hopen `$"::",string port;         / connect to publisher
-  neg[h](`.ps.add; topic);            / add self as subscriber
-  .ps.rec[topic]:rec; }               / store receiver function
+.ps.sub:{[t; p; rec]                  / subscribe to a single topic with a receiver function
+  h:hopen `$"::",string p;            / connect to publisher
+  neg[h](`.ps.add; t);                / add self as subscriber
+  .ps.rec[t]:rec;                     / store receiver function
+  .ps.opt[t]:.; }                     / the default subscription uses apply . on incoming data
+
+.ps.subu:{[t; p; rec]                 / subu is for unary receiver functions, and uses apply at @ on data
+  .ps.sub[t; p; rec];
+  .ps.opt[t]:@; }
 
 / The .ps context aims to support more complex pub/sub patterns
 / One such is a zipping of topics
@@ -54,5 +60,10 @@
     }[;; zid; rec];
 
   zsub:{[t; p; zrec]                              / subscribe each topic individually
-    .ps.sub[t; p; zrec[t;]];}[;;zrec];
+    .ps.subu[t; p; zrec[t;]];}[;;zrec];
   ts zsub' ps; }
+
+/
+TODO:
+Add back feature to subscribe to a subset of symbols
+  Maybe this is a separate subscription... don't think it needs to or should be part of default
