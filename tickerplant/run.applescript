@@ -9,16 +9,16 @@ tell application "Finder" to if exists "/opt/local/bin/rlwrap" as POSIX file the
 set Q to R & "~/q/m64/q"
 set T to "~/q/q-by-practice/tickerplant/"
 
-on newdb(name, port)
-	newtab(name, Q & " " & T & "nodes/cx.q " & name & " -p " & (port as text))
-end newdb
+on newcx(name, port)
+	newproc(name, "nodes/cx.q " & name & " -p " & (port as text))
+end newcx
 
-on newtab(name, cmd)
+on newproc(name, cmd)
 	tell application "System Events" to tell process "Terminal.app" to keystroke "t" using command down
-	tell application "Terminal" to do script "cd " & T & "; " & cmd in front window
+	tell application "Terminal" to do script "cd " & T & "; " & Q & " " & T & cmd in front window
 	setname(name)
-	delay (0.5)
-end newtab
+	delay (1.0)
+end newproc
 
 on setname(name)
 	tell front window of application "Terminal"
@@ -33,46 +33,17 @@ on setname(name)
 	end tell
 end setname
 
-on netstat()
-	do shell script "netstat -an | grep -i listen | grep 5010"
-end netstat
-
-on hasticker()
-	try
-		netstat()
-		display dialog "Tickerplant already running"
-		return true
-	end try
-	return false
-end hasticker
-
-on wait4ticker()
-	repeat 20 times
-		try
-			delay 0.1
-			netstat()
-			return true
-		end try
-	end repeat
-	display dialog "Could not start tickerplant"
-	return false
-end wait4ticker
-
 tell application "Terminal"
 	activate
-	if (true = my hasticker()) then return
-	do script "cd " & T & "; " & Q & " " & T & "tick.q -p 5010"
-	delay (0.5)
-	if (false = my wait4ticker()) then return
-	set number of rows of front window to 30
-	set number of columns of front window to 100
-	my newtab("rdb", Q & " " & T & "nodes/rdb.q -p 5011")
-	my newdb("hlcv", 5014)
-	my newdb("last", 5015)
-	my newdb("tq", 5016)
-	my newdb("vwap", 5017)
-	my newdb("show", 0)
-	my newtab("feed", Q & " " & T & "feed.q localhost:5010")
+	my newproc("tick", "tick.q -p 5010")
+	my newproc("rdb", "nodes/rdb.q -p 5011")
+	my newcx("hlcv", 5014)
+	my newcx("last", 5015)
+	my newcx("tq", 5016)
+	my newcx("vwap", 5017)
+	my newcx("show", 0)
+	my newproc("feed", "feed.q -p 5009")
 	set selected of tab 1 of front window to true
-	my setname("ticker")
+	set number of rows of front window to 50
+	set number of columns of front window to 150
 end tell

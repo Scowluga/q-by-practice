@@ -3,16 +3,16 @@
 \l internal/ps.q
 
 sn:2 cut (                                      / symbol and name
- `AMD;"ADVANCED MICRO DEVICES";
- `AIG;"AMERICAN INTL GROUP INC";
- `AAPL;"APPLE INC COM STK";
- `DELL;"DELL INC";
- `DOW;"DOW CHEMICAL CO";
- `GOOG;"GOOGLE INC CLASS A";
- `HPQ;"HEWLETT-PACKARD CO";
- `INTC;"INTEL CORP";
- `IBM;"INTL BUSINESS MACHINES CORP";
- `MSFT;"MICROSOFT CORP")
+  `AMD;"ADVANCED MICRO DEVICES";
+  `AIG;"AMERICAN INTL GROUP INC";
+  `AAPL;"APPLE INC COM STK";
+  `DELL;"DELL INC";
+  `DOW;"DOW CHEMICAL CO";
+  `GOOG;"GOOGLE INC CLASS A";
+  `HPQ;"HEWLETT-PACKARD CO";
+  `INTC;"INTEL CORP";
+  `IBM;"INTL BUSINESS MACHINES CORP";
+  `MSFT;"MICROSOFT CORP")
 s:first each sn                                 / symbol
 n:last each sn                                  / name
 p:33 27 84 12 20 72 36 51 42 29                 / price
@@ -32,16 +32,16 @@ value "\\S ",string "i"$0.8*.z.p%1000000000;    / randomize feed system
 
 / =====================================================================================================================
 batch:{                                         / generate a batch of prices
- d:gen x;
- qx::x?cnt;                                     / index
- qb::rnd x?1.0;                                 / margins
- qa::rnd x?1.0;
- n:where each qx=/:til cnt;
- s:p*prds each d n;
- qp::x#0.0;                                     / price
- (qp raze n):rnd raze s;
- p::last each s;
- qn::0 }                                        / position
+  d:gen x;
+  qx::x?cnt;                                    / index
+  qb::rnd x?1.0;                                / margins
+  qa::rnd x?1.0;
+  n:where each qx=/:til cnt;
+  s:p*prds each d n;
+  qp::x#0.0;                                    / price
+  (qp raze n):rnd raze s;
+  p::last each s;
+  qn::0 }                                       / position
 / gen feed for ticker plant
 
 len:10000
@@ -52,34 +52,43 @@ qpt:5                                           / avg quotes per trade
 
 / =========================================================
 t:{                                             / generates one tick with `x` trades
- if[not (qn+x)<count qx; batch len];            / renew batch if necessary
- i:qx n:qn+til x;
- qn+:x;
- (s i; qp n; `int$x?99; 1=x?20; x?c; e i) }
+  if[not (qn+x)<count qx; batch len];           / renew batch if necessary
+  i:qx n:qn+til x;
+  qn+:x;
+  (s i; qp n; `int$x?99; 1=x?20; x?c; e i) }
 
 q:{                                             / generates one tick with `x` quotes
- if[not (qn+x)<count qx; batch len];            / renew batch if necessary
- i:qx n:qn+til x;
- p:qp n;
- qn+:x;
- (s i; p-qb n; p+qa n; vol x; vol x; x?m; e i) }
+  if[not (qn+x)<count qx; batch len];           / renew batch if necessary
+  i:qx n:qn+til x;
+  p:qp n;
+  qn+:x;
+  (s i; p-qb n; p+qa n; vol x; vol x; x?m; e i) }
 
-feed:{h$[rand 2;                                / update tickerplant with either a group of trades or quotes
- ("upd"; `trade; t 1+rand maxn);
- ("upd"; `quote; q 1+rand qpt*maxn)];}
+/ Bulk init system with data from "earlier today" before system start
+feedm:{[time]
+  $[rand 2;
+    (`trade; (enlist a#time),t a:1+rand maxn);
+    (`quote; (enlist a#time),q a:1+rand qpt*maxn)] }
 
-feedm:{h$[rand 2;
- ("upd"; `trade; (enlist a#x),t a:1+rand maxn);
- ("upd"; `quote; (enlist a#x),q a:1+rand qpt*maxn)];}
+initm:{
+  o:"t"$9e5*floor (.z.T-3600000)%9e5;
+  d:.z.T-o;
+  len:floor d%113;
+  rec:feedm each `timespan$o+asc len?d;
+  .ps.pub[`feed;] each rec; }
 
-init:{
- o:"t"$9e5*floor (.z.T-3600000)%9e5;
- d:.z.T-o;
- len:floor d%113;
- feedm each `timespan$o+asc len?d;}
+/ Use timer to periodically feed "live" data to tickerplant
+feed:{$[rand 2;
+  (`trade; t 1+rand maxn);
+  (`quote; q 1+rand qpt*maxn)] }
 
-h:neg hopen `::5010                           / open connection to tickerplant
-init 0                                        / bulk init system with data from "earlier today" before system start
+.z.ts:{.ps.pub[`feed; feed[]];}
 
-.z.ts:feed                                    / use timer to periodically feed "live" data to tickerplant
-\t 507
+/ Kickstart the system by telling the tickerplant to subscribe
+.ps.postadd:{[t]
+  initm[];
+  system"t 507";
+  show "feed started"; }
+
+h:hopen `::5010
+neg[h] (`init; `feed; 5009);
