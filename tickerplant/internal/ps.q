@@ -26,7 +26,7 @@
 / Subscribing ==========================================================================================================
 
 .ps.i.rec:(`symbol$())!()             / subscription receiver functions (can only subscribe once to each topic)
-.ps.h:(`symbol$())!`int$()            / open handles
+.ps.h:(`int$())!`int$()               / port -> open handle
 
 .ps.i.push:{[t; d]                    / push data to subscriber
   .ps.i.rec[t][d]; }
@@ -34,7 +34,7 @@
 .ps.i.sub:{[t; p; rec]                / subscribe to a single topic with a receiver function and operator
   .ps.i.rec[t]:rec;                   / store receiver function
   h:hopen `$"::",string p;            / connect to publisher
-  .ps.h[t]:h;                         / store open handle for subsequent calls
+  .ps.h[p]:h;                         / store open handle for subsequent calls
   neg[h](`.ps.i.add; t); }            / add self as subscriber
 
 .ps.sub:{[t; p; f]                  / default sub uses apply .           
@@ -68,7 +68,5 @@
     .ps.subu[t; p; zrec[t;]];}[;;zrec];
   ts zsub' ps; }
 
-/
-TODO:
-Add back feature to subscribe to a subset of symbols
-  Maybe this is a separate subscription... don't think it needs to or should be part of default
+/ TODO: add feature to pass parameters when subscribing to a topic
+/   this was used to specify a subset of symbols in the original example
