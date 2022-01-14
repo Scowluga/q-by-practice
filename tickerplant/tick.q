@@ -1,5 +1,5 @@
 / A simple tickerplant
-/ Usage: q tick.q [DST] [-p 5010] [-o h]
+/ Usage: q tick.q [LOG_FILE_DST]
 
 \l schema.q
 \l internal/ps.q

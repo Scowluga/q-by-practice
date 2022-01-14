@@ -1,4 +1,4 @@
-/ Example clients
+/ Simple clients
 
 \l internal/ps.q
 
@@ -6,10 +6,6 @@ x:.z.x 0                  / client type
 s:`;                   	  / default all symbols
 d:`GOOG`IBM`MSFT          / symbol selection
 t:`trade`quote            / default tables
-
-/ rdb
-if[x~"rdb";
- upd:insert]
 
 / high low close volume
 if[x~"hlcv";
