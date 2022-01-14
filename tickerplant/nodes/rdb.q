@@ -14,4 +14,4 @@ end:{
   @[; `sym; `g#] each t;}
 \
 
-.ps.sub[`tick; 5010; insert];       / insert tickerplant entries into the rdb
+.ps.sub[; 5010; insert] each `trade`quote;       / insert tickerplant data into the corresponding table

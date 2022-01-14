@@ -91,4 +91,4 @@ feed:{$[rand 2;
   show "feed started"; }
 
 h:hopen `::5010
-neg[h] (`init; `feed; 5009);
+neg[h](`init; `feed; 5009);

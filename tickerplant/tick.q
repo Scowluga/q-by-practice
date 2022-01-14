@@ -48,7 +48,7 @@ upd:{[t; x]
     a:"n"$a;
     x:$[0>type first x; a,x; (enlist(count first x)#a),x]];
   f:key flip value t;
-  .ps.pub[`tick; (t; $[0>type first x; enlist f!x; flip f!x])];
+  .ps.pub[t; (t; $[0>type first x; enlist f!x; flip f!x])];
   if[l; l enlist (`upd; t; x); i+:1]; }
 
 init:{[topic; port]                / tells the ticker to subscribe to a feed

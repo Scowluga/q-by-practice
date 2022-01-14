@@ -9,15 +9,19 @@
 .z.pg:{`unsupported}                  / sync handler - no sync communication is allowed
 
 / Publishing ===========================================================================================================
+/ Processes can publish data to "topics" represented by unique symbols
 
 .ps.i.w:(`symbol$())!()               / topic symbol -> list of subscriber handlers
+
+.ps.i.del:{[t]                        / delete subscription
+  .ps.i.w[t]:.ps.i.w[t] except .z.w; }
+
+.z.pc:{[h]                            / connection close handler
+  .ps.i.w:except[;h] each .ps.i.w; }  / remove all active subscriptions
 
 .ps.pub:{[t; d]                       / publish data to topic; data is applied, so must be enlisted
   {[h; t; d]                          / send async message to each subscriber
     neg[h](`.ps.i.push; t; d);}[; t; d] each .ps.i.w[t]; }
-
-.z.pc:{[h]                            / connection close handler
-  .ps.i.w:except[;h] each .ps.i.w; }  / remove active subscriptions
 
 .ps.i.add:{[t]                        / subscribe caller to topic
   .ps.i.w[t],:.z.w;                   / add to list of subscribers
@@ -26,21 +30,26 @@
 / Subscribing ==========================================================================================================
 
 .ps.i.rec:(`symbol$())!()             / subscription receiver functions (can only subscribe once to each topic)
-.ps.h:(`int$())!`int$()               / port -> open handle
+.ps.h:(`symbol$())!`int$()            / topic -> open handle
 
 .ps.i.push:{[t; d]                    / push data to subscriber
   .ps.i.rec[t][d]; }
 
+.ps.unsub:{[t]                        / unsubscribe from single topic
+  neg[.ps.h[t]](`.ps.i.del; t); 
+  .ps.h _:t;
+  .ps.i.rec _:t; }
+
 .ps.i.sub:{[t; p; rec]                / subscribe to a single topic with a receiver function and operator
-  .ps.i.rec[t]:rec;                   / store receiver function
   h:hopen `$"::",string p;            / connect to publisher
-  .ps.h[p]:h;                         / store open handle for subsequent calls
+  .ps.i.rec[t]:rec;                   / store receiver function
+  .ps.h[t]:h;                         / store open handle for subsequent calls
   neg[h](`.ps.i.add; t); }            / add self as subscriber
 
-.ps.sub:{[t; p; f]                  / default sub uses apply .           
+.ps.sub:{[t; p; f]                    / default sub uses apply .           
   .ps.i.sub[t; p; .[f;]]; }
 
-.ps.subu:{[t; p; f]                 / subu is for unary receiver functions, and uses apply at @
+.ps.subu:{[t; p; f]                   / subu is for unary receiver functions, and uses apply at @
   .ps.i.sub[t; p; @[f;]]; }
 
 / The .ps context aims to support more complex pub/sub patterns
@@ -68,5 +77,5 @@
     .ps.subu[t; p; zrec[t;]];}[;;zrec];
   ts zsub' ps; }
 
-/ TODO: add feature to pass parameters when subscribing to a topic
+/ TODO: consider feature to pass parameters when subscribing to a topic
 /   this was used to specify a subset of symbols in the original example
