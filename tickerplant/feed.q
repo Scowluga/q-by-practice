@@ -30,7 +30,7 @@ vol:{10+`int$x?90}                              / x random volumes [10, 99]
 value "\\S ",string "i"$0.8*.z.p%1000000000;    / randomize feed system
 \S 235721                                       / set random seed
 
-/ =====================================================================================================================
+/ ======================================================================================================================
 batch:{                                         / generate a batch of prices
   d:gen x;
   qx::x?cnt;                                    / index
@@ -50,7 +50,7 @@ batch len                                       / generate initial batch
 maxn:15                                         / max trades per tick - every tick we send [1, maxn] trades 
 qpt:5                                           / avg quotes per trade
 
-/ =========================================================
+/ ======================================================================================================================
 t:{                                             / generates one tick with `x` trades
   if[not (qn+x)<count qx; batch len];           / renew batch if necessary
   i:qx n:qn+til x;
