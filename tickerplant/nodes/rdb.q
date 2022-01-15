@@ -10,7 +10,7 @@
 end:{[d]
   t:tables`.;
   t@:where `g=attr each t@\:`sym;
-  .Q.hdpf[`$"::5012"; `:.; x; `sym];
+  .Q.hdpf[`$"::5012"; `:.; d; `sym];
   @[; `sym; `g#] each t; }
 
 .ps.subu[`end; 5010; end];
