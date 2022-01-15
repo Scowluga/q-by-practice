@@ -36,6 +36,8 @@ init:{[port]                            / tells the ticker to initialize and sub
   if[count .z.x 0; il[.z.x 0]];         / log directory is specified: initialize logs
   .ps.sub[`feed; port; upd]; }          / subscribe to feed
 
+.ipc.expose `init;
+
 / End of day ===========================================================================================================
 
 end:{
@@ -43,7 +45,7 @@ end:{
   .ps.pub[`end; d];                     / publish end of day signal
   system"t 0";                          / stop checking for end of day
   d+:1;                                 / move to next day
-  if[l; hclose l; l::0(`il; d)]; }      / clean up log file
+  if[l; hclose l; l::il[d]]; }          / clean up log file, init next day's logs
 
 ce:{[cur]                               / check for end of day
   if[d<cur;

@@ -3,6 +3,7 @@
 / Internal functions are located under .ps.i
 
 \l internal/ipc.q
+.ipc.expose `.ps.i.add`.ps.i.push`.ps.i.del;
 
 / Publishing ===========================================================================================================
 / Processes can publish data to "topics" represented by unique symbols
@@ -78,8 +79,3 @@
   zsub:{[t; p; zrec]                              / subscribe each topic individually
     .ps.subu[t; p; zrec[t;]];}[;;zrec];
   ts zsub' ps; }
-
-/ TODO: consider feature to pass parameters when subscribing to a topic
-/   this was used to specify a subset of symbols in the original example
-/ TODO: consider blocking all remote procedure calls unless the server explicitly "exposes" a method
-/   .ps.i.add and .ps.i.push will be exposed by default if someone imports IPC
