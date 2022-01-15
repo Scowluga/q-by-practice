@@ -37,6 +37,7 @@ tell application "Terminal"
 	activate
 	my newproc("tick", "tick.q ./out/logs -p 5010")
 	my newproc("rdb", "nodes/rdb.q -p 5011")
+	my newproc("hdb", "nodes/hdb.q -p 5012")
 	my newcx("hlcv", 5014)
 	my newcx("last", 5015)
 	my newcx("tq", 5016)

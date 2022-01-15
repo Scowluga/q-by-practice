@@ -2,11 +2,7 @@
 / Client functions are located directly under .ps
 / Internal functions are located under .ps.i
 
-.z.ps:{                               / async handler
-  if[-11h<>type first x; :];          / only allow remote procedure calls
-  .[value first x; 1 _ x; ::]; }      / trap evaluation
-
-.z.pg:{`unsupported}                  / sync handler - no sync communication is allowed
+\l internal/ipc.q
 
 / Publishing ===========================================================================================================
 / Processes can publish data to "topics" represented by unique symbols
@@ -30,20 +26,26 @@
 / Subscribing ==========================================================================================================
 
 .ps.i.rec:(`symbol$())!()             / subscription receiver functions (can only subscribe once to each topic)
-.ps.h:(`symbol$())!`int$()            / topic -> open handle
+.ps.i.tp:(`symbol$())!`int$()         / topic -> port
+.ps.i.ph:(`int$())!`int$()            / port -> open handle
+
+.ps.h:{.ps.i.ph .ps.i.tp x}           / helper to get handle for a topic
 
 .ps.i.push:{[t; d]                    / push data to subscriber
   .ps.i.rec[t][d]; }
 
 .ps.unsub:{[t]                        / unsubscribe from single topic
   neg[.ps.h[t]](`.ps.i.del; t); 
-  .ps.h _:t;
+  .ps.i.tp _:t;
   .ps.i.rec _:t; }
 
 .ps.i.sub:{[t; p; rec]                / subscribe to a single topic with a receiver function and operator
-  h:hopen `$"::",string p;            / connect to publisher
+  h:$[null .ps.i.ph[p];               / obtain connection to publisher
+    hopen `$"::",string p;
+    .ps.i.ph[p]];
   .ps.i.rec[t]:rec;                   / store receiver function
-  .ps.h[t]:h;                         / store open handle for subsequent calls
+  .ps.i.tp[t]:p;                      / store open handle for subsequent calls
+  .ps.i.ph[p]:h;
   neg[h](`.ps.i.add; t); }            / add self as subscriber
 
 .ps.sub:{[t; p; f]                    / default sub uses apply .           
@@ -79,3 +81,5 @@
 
 / TODO: consider feature to pass parameters when subscribing to a topic
 /   this was used to specify a subset of symbols in the original example
+/ TODO: consider blocking all remote procedure calls unless the server explicitly "exposes" a method
+/   .ps.i.add and .ps.i.push will be exposed by default if someone imports IPC

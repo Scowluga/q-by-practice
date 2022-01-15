@@ -29,16 +29,17 @@ il:{[dst]                               / init logs
   i::j;                                 / msg count in log file
   l::hopen L; }                         / open handle to log file
 
-init:{[topic; port]                     / tells the ticker to initialize and subscribe to a feed
+init:{[port]                            / tells the ticker to initialize and subscribe to a feed
   system"t 1000";                       / start end of day timer
   d::.z.D;                              / current date
   @[; `sym; `g#]each tables[`.];        / make `sym column hashed for both tables
   if[count .z.x 0; il[.z.x 0]];         / log directory is specified: initialize logs
-  .ps.sub[topic; port; upd]; }          / subscribe to feed
+  .ps.sub[`feed; port; upd]; }          / subscribe to feed
 
 / End of day ===========================================================================================================
 
 end:{
+  .ps.unsub[`feed];                     / unsub from feed
   .ps.pub[`end; d];                     / publish end of day signal
   system"t 0";                          / stop checking for end of day
   d+:1;                                 / move to next day
