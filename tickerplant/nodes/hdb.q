@@ -7,12 +7,8 @@
 \l internal/cb.q
 \l hdb
 
-.ipc.expose `qget`qset;
+.ipc.expose `query;
 
-qget:{[args]
+query:{[args]
   if[not count[args] within 3 6; 'invalid];
   .[?; args] }
-
-qset:{[args]
-  if[4<>count args; 'invalid];
-  .[!; args] }
