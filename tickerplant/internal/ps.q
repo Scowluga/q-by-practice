@@ -1,6 +1,4 @@
-/ Adds simplified pub/sub functionality using the .ps context
-/ Client functions are located directly under .ps
-/ Internal functions are located under .ps.i
+/ Adds simplified pub/sub functionality
 
 \l internal/ipc.q
 .ipc.expose `.ps.i.add`.ps.i.push`.ps.i.del;
@@ -67,8 +65,8 @@
 .ps.i.bf:enlist[::]                               / .ps.i.bf contains buffers for zipped topics (:: for generality)
 
 .ps.zip:{[ts; ps; rec]                            / zips topics to be applied together to rec
-  if[count[ts]<>count[ps]; `length];              / ts (topic symbols) and ps (topic ports) must have equal size
-  if[count[ts]<2; `length];
+  if[count[ts]<>count[ps]; 'length];              / ts (topic symbols) and ps (topic ports) must have equal size
+  if[count[ts]<2; 'length];
 
   zid:count .ps.bufs;                             / zid is a uid per zip, used in .ps.bufs as an index
   .ps.i.bf,:enlist ts!#[(count ts; 1); ::];       / the buffer itself is one FIFO list (with ::) per zipped topic

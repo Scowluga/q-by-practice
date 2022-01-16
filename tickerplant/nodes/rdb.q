@@ -1,9 +1,14 @@
 / A simple real-time database
+/ - writes to hdb at end of day
+/ - exposes funcitonal form queries via callbacks
 
 \l schema.q
 \l internal/ps.q
+\l internal/qy.q
 
-.ps.sub[; 5010; insert] each `trade`quote;        / insert tickerplant data into the corresponding table
+.ps.sub[`trade`quote; 5010; insert];              / insert tickerplant data into the corresponding table
+
+.ipc.expose `trade`quote;
 
 / End of day ===========================================================================================================
 / At end of day, the rdb should save the day's data to the hdb, which is partitioned by date

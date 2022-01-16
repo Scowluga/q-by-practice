@@ -1,8 +1,10 @@
 / Manages IPC
 / By default any process is completely unreachable for IPC
-/ Processes can "expose" certain functions to be reachable via remote procedure call
+/ Processes can "expose" certain functionality to be reachable via remote procedure call
+/ The first argument must be an exposed function symbolic name
+/ .ipc.i.es also contains exposed table names for querying in qy.q
 
-.ipc.i.es:`symbol$()                        / exposed functions
+.ipc.i.es,:`symbol$()                       / exposed names
 .ipc.expose:{[x] .ipc.i.es,:x;}
 
 .ipc.i.v:{[x]                               / validate an ipc request
