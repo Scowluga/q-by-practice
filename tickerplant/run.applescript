@@ -11,13 +11,13 @@ set T to "~/q/q-by-practice/tickerplant/"
 
 on newcx(name, port)
 	newproc(name, "nodes/cx.q " & name & " -p " & (port as text))
+	delay (1.0)
 end newcx
 
 on newproc(name, cmd)
 	tell application "System Events" to tell process "Terminal.app" to keystroke "t" using command down
 	tell application "Terminal" to do script "cd " & T & "; " & Q & " " & T & cmd in front window
 	setname(name)
-	delay (1.0)
 end newproc
 
 on setname(name)
@@ -36,8 +36,11 @@ end setname
 tell application "Terminal"
 	activate
 	my newproc("tick", "tick.q ./out/logs -p 5010")
+	delay (3.0)
 	my newproc("rdb", "nodes/rdb.q -p 5011")
+	delay (3.0)
 	my newproc("hdb", "nodes/hdb.q -p 5012")
+	delay (2.0)
 	my newcx("hlcv", 5014)
 	my newcx("last", 5015)
 	my newcx("tq", 5016)

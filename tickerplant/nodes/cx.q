@@ -26,7 +26,7 @@ if[x~"vwap";              / volume weighted average price
   partial:([sym:()] wp:(); size:());
   upd:{[t; x]
     partial+:select wp:size wsum price, sum size by sym from x; };
-  vwap:{select sym, vwap:wp%size, size from partial}
+  vwap:{select sym, vwap:wp%size, size from partial};
   .ps.sub[`trade; 5010; upd]]
 
 if[x~"show";              / show the number of incoming updates

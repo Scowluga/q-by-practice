@@ -33,7 +33,7 @@ init:{[port]                            / tells the ticker to initialize and sub
   system"t 1000";                       / start end of day timer
   d::.z.D;                              / current date
   @[; `sym; `g#]each tables[`.];        / make `sym column hashed for both tables
-  if[count .z.x 0; il[.z.x 0]];         / log directory is specified: initialize logs
+  $[count .z.x 0; il[.z.x 0]; l::0];    / log directory is specified: initialize logs
   .ps.sub[`feed; port; upd]; }          / subscribe to feed
 
 .ipc.expose `init;

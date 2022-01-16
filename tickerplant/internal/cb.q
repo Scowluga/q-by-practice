@@ -5,7 +5,7 @@
 .ipc.expose `.cb.i.serve`.cb.i.res;
 
 .cb.i.ts:(`long$())!`symbol$()              / token -> valid callback
-.cb.i.gent:{`long$.z.P}                     / a trivial random token generator
+.cb.i.gent:{`long$.z.P}                  / a trivial random token generator
 
 .cb.i.serve:{[cb; tk; x]                    / serve a callback (must be explicitly exposed by server)
   .ipc.i.v[x];                              / validate call
