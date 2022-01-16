@@ -49,10 +49,14 @@
   .ps.i.ph[p]:h;
   neg[h](`.ps.i.add; t); }            / add self as subscriber
 
-.ps.sub:{[t; p; f]                    / default sub uses apply .           
+.ps.sub:{[t; p; f]                    / default sub uses apply .
+  if[11h=type t;                      / if input is topic list
+    .ps.sub[; p; f] each t; :];       / sub to each input topic
   .ps.i.sub[t; p; .[f;]]; }
 
 .ps.subu:{[t; p; f]                   / subu is for unary receiver functions, and uses apply at @
+  if[11h=type t;
+    .ps.subu[; p; f] each t; :];
   .ps.i.sub[t; p; @[f;]]; }
 
 / The .ps context aims to support more complex pub/sub patterns
