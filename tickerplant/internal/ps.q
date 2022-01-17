@@ -14,8 +14,8 @@
 .z.pc:{[h]                            / connection close handler
   .ps.i.w:except[;h] each .ps.i.w; }  / remove all active subscriptions
 
-.ps.pub:{[t; d]                       / publish data to topic; data is applied, so must be enlisted
-  {[h; t; d]                          / send async message to each subscriber
+.ps.pub:{[t; d]                       / publish data to topic
+  {[h; t; d]
     neg[h](`.ps.i.push; t; d);}[; t; d] each .ps.i.w[t]; }
 
 .ps.i.add:{[t]                        / subscribe caller to topic
@@ -60,7 +60,7 @@
 / The .ps context aims to support more complex pub/sub patterns
 / One such is a zipping of topics
 / When 2 or more topics are zipped, data sent is buffered until each topic has at least one record
-/ One record per topic is then applied at once in FIFO order to the receiver function
+/ One record per topic (in FIFO order) is then applied at once to the receiver function
 
 .ps.i.bf:enlist[::]                               / .ps.i.bf contains buffers for zipped topics (:: for generality)
 
