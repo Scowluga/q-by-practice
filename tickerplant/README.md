@@ -11,9 +11,9 @@ On a Macbook Pro running Big Sur 11.5.2:
 - Run `run.applescript`.
 
 ## Architecture
-Nodes are structured in a directed acyclic graph.
-At the root of our system there is a tickerplant that receives a feed of trades and quotes. The tickerplant publishes 
-this information to a series of other nodes that generate signals and aggregate the data to be published again.
+Processes are structured in a directed acyclic graph.
+At the root of this graph is a tickerplant that receives a feed of trades and quotes. The tickerplant publishes 
+this information to a series of other nodes that can generate signals and aggregate the data to be published again.
 
 <img src="https://user-images.githubusercontent.com/19809631/149685943-2f86a141-c2b9-4765-8d8f-091f85d19bbf.png" width=60%>
 
