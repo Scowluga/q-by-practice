@@ -15,11 +15,10 @@ Nodes are structured in a directed acyclic graph.
 At the root of our system there is a tickerplant that receives a feed of trades and quotes. The tickerplant publishes 
 this information to a series of other nodes that generate signals and aggregate the data to be published again.
 
+<img src="https://user-images.githubusercontent.com/19809631/149685943-2f86a141-c2b9-4765-8d8f-091f85d19bbf.png" width=60%>
+
 The leaf nodes of the system are clients that take the refined data and provide it to external end-users. For example, 
 an algorithmic trading bot could use the real-time signals to make buy/sell decisions.
-
-![](architecture.png)
-*Tickerplant architecture*
 
 Nodes communicate via IPC utilities defined in the `internal` folder including:
 
@@ -29,11 +28,11 @@ Nodes communicate via IPC utilities defined in the `internal` folder including:
 4. `qy.q` exposing arbitrary functional form queries on specific tables
 
 ## Primary Nodes
-### Feed
+### feed
 The feed consists of randomly generated data for the `trade` and `quote` tables. 
 The feed prompts the tickerplant to subscribe before beginning to publish.
 
-### Tickerplant
+### tickerplant
 The tickerplant subscribes to the feed and organizes the data into a tabular format. It then publishes each table 
 individually, and optionally logs the incoming feed.
 
