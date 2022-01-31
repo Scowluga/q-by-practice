@@ -1,6 +1,7 @@
 / https://code.kx.com/q/wp/trend-indicators/
 / We can obtain symbol data directly from exchanges then feed them into a tickerplant
-/ The data-processing system can then output data, for which we now consider the BTC_USD symbol on the KRAKEN exchange
+/ The data-processing system can then output processed data
+/ For which we now consider specifically the BTC_USD symbol on the KRAKEN exchange
 \l bitcoinKraken
 
 / MACD, EMA
@@ -24,3 +25,11 @@ update rsi:100-100%1+gain%loss from `rsi_tb;
 
 overbought:exec date from 14 _ rsi_tb where rsi>70;
 oversold:exec date from 14 _ rsi_tb where rsi<30;
+
+/ MFI
+mfi_tb:1 _ select date, flow:vol*(deltas[high]+deltas[low]+deltas[close])%3 from bitcoinKraken;
+update ratio:mavg[14; flow|0]%neg[mavg[14; flow&0]] from `mfi_tb;
+update mfi:100-100%1+ratio from `mfi_tb;
+
+vwob:exec date from 14 _ mfi_tb where mfi>80; / volume-weighted overbought
+vwos:exec date from 14 _ mfi_tb where mfi<20; / volume-weighted oversold
