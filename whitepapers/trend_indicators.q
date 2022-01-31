@@ -1,7 +1,8 @@
 / https://code.kx.com/q/wp/trend-indicators/
 / We can obtain symbol data directly from exchanges then feed them into a tickerplant
-/ The data-processing system can then output processed data
+/ The data-processing system can then output processed data (high, low, open, close, ...)
 / For which we now consider specifically the BTC_USD symbol on the KRAKEN exchange
+/   i.e. select cols from data where sym=`BTC_USD, exch=`KRAKEN
 \l bitcoinKraken
 
 / MACD, EMA
